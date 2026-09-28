@@ -57,7 +57,10 @@ func (c *Client) fetchVKCallsAnonToken(
 	}
 	token, ok := respMap["anonymous_token"].(string)
 	if !ok || token == "" {
-		return "", fmt.Errorf("missing anonymous_token in auth.getAnonymToken response: %v", resp)
+		token, ok = respMap["token"].(string)
+	}
+	if !ok || token == "" {
+		return "", fmt.Errorf("missing anonymous_token/token in auth.getAnonymToken response: %v", resp)
 	}
 	return token, nil
 }
