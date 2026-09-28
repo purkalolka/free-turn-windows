@@ -3,6 +3,7 @@ package backend
 import (
 	"context"
 	"errors"
+	"net"
 	"sync"
 
 	"github.com/samosvalishe/free-turn-proxy/desktop/backend/notify"
@@ -85,7 +86,18 @@ func (e *Engine) Connect(srv Server) error {
 	e.mu.Unlock()
 
 	if vpn {
-		return wintunnel.Connect(cfg, srv.WgClientConf, DefaultTunnelMTU)
+		var exclusions []string
+		if srv.SSH != nil && srv.SSH.IP != "" {
+			exclusions = append(exclusions, srv.SSH.IP)
+		}
+		if srv.Peer != "" {
+			if host, _, err := net.SplitHostPort(srv.Peer); err == nil && net.ParseIP(host) != nil {
+				if srv.SSH == nil || host != srv.SSH.IP {
+					exclusions = append(exclusions, host)
+				}
+			}
+		}
+		return wintunnel.Connect(cfg, srv.WgClientConf, DefaultTunnelMTU, exclusions...)
 	}
 	return mobile.Start(cfg)
 }

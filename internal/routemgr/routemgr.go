@@ -36,6 +36,17 @@ func (m *Manager) Gateway() string {
 	return m.gateway
 }
 
+func (m *Manager) EnsureRoute(ipStr string) {
+	if m == nil || ipStr == "" {
+		return
+	}
+	ip := net.ParseIP(ipStr)
+	if ip == nil {
+		return
+	}
+	m.EnsureRouteToTURN(ip)
+}
+
 func (m *Manager) EnsureRouteToTURN(ip net.IP) {
 	if m == nil {
 		return
