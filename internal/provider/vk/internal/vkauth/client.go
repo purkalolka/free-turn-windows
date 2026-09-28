@@ -55,10 +55,13 @@ type Client struct {
 	fetchMu            sync.Mutex
 	lastFetchTime      time.Time
 	captchaAttempt     int
+	requestFn          func(ctx context.Context, httpClient tlsclient.HttpClient, profile browserprofile.Profile, data, url string) (map[string]any, error)
+	vkCallsChain       vkCallsChainFn
 	tokenChain         tokenChainFn
 	minFetchIntervalFn func() time.Duration
 }
 
+type vkCallsChainFn func(ctx context.Context, link string, streamID int, jar tlsclient.CookieJar) (string, string, []string, error)
 type tokenChainFn func(ctx context.Context, link string, streamID int, creds VKCredentials, jar tlsclient.CookieJar) (string, string, []string, error)
 
 func New(cfg Config) *Client {
@@ -82,6 +85,8 @@ func New(cfg Config) *Client {
 	if c.streamsFn == nil {
 		c.streamsFn = func() int32 { return 1 }
 	}
+	c.requestFn = c.doRequest
+	c.vkCallsChain = c.getVKCallsChain
 	c.tokenChain = c.getTokenChain
 	c.minFetchIntervalFn = func() time.Duration {
 		return 3*time.Second + time.Duration(randx.Intn(3000))*time.Millisecond
@@ -248,9 +253,29 @@ func (c *Client) fetch(ctx context.Context, link string, streamID int) (string, 
 
 	c.captchaAttempt = 0
 
+	jar := personanet.NewCookieJar()
+
+	if c.vkCallsChain != nil {
+		user, pass, addrs, err := c.vkCallsChain(ctx, link, streamID, jar)
+		if err == nil {
+			c.log.Infof("[STREAM %d] [VK Auth] Success via VK Calls API (no captcha, client_id=8093730)", streamID)
+			return user, pass, addrs, nil
+		}
+		if ctx.Err() != nil {
+			return "", "", nil, err
+		}
+		if errors.Is(err, ErrCaptchaWaitRequired) || errors.Is(err, ErrFatalCaptchaNoStreams) ||
+			errors.Is(err, ErrInvalidJoinLink) || errors.Is(err, ErrAnonymousBlocked) ||
+			errors.Is(err, ErrCallFull) || errors.Is(err, captcha.ErrUnavailable) {
+			return "", "", nil, err
+		}
+		c.log.Warnf("[STREAM %d] [VK Auth] VK Calls API path failed (%v), falling back to standard webauth", streamID, err)
+		// reset cookie jar for standard webauth fallback
+		jar = personanet.NewCookieJar()
+	}
+
 	var lastErr error
 	burns := 0
-	jar := personanet.NewCookieJar()
 	for i := 0; i < len(c.credentials); {
 		creds := c.credentials[i]
 		c.log.Debugf("[STREAM %d] [VK Auth] Trying credentials: client_id=%s", streamID, creds.ClientID)

@@ -20,6 +20,7 @@ func newTestClient(t *testing.T, fake tokenChainFn, opts ...func(*Client)) *Clie
 		StreamsPerCache: 10,
 		Credentials:     []VKCredentials{{ClientID: "a"}, {ClientID: "b"}, {ClientID: "c"}},
 	})
+	c.vkCallsChain = nil
 	c.tokenChain = fake
 	c.minFetchIntervalFn = func() time.Duration { return 0 }
 	for _, o := range opts {
