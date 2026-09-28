@@ -151,7 +151,10 @@ func ensureWintunDLL() error {
 // save it from this). So phase 1 only assigns the interface's own address
 // (irrelevant to other traffic's routing) and starts the session on the
 // machine's normal route; phase 2, once connected, installs the real routes.
-func Connect(configJSON, wgConfigText string, mtu int) error {
+// If exclusionIPs are provided (e.g. VPS server IP for SSH management), static
+// host routes (/32) are installed via the physical default gateway so that server
+// control and SSH remain reachable while the VPN is active.
+func Connect(configJSON, wgConfigText string, mtu int, exclusionIPs ...string) error {
 	mu.Lock()
 	alreadyActive := active != nil
 	mu.Unlock()
@@ -255,6 +258,12 @@ func Connect(configJSON, wgConfigText string, mtu int) error {
 			routes.Close()
 		}
 		return fmt.Errorf("configure routes: %w", err)
+	}
+
+	if routes != nil {
+		for _, ipStr := range exclusionIPs {
+			routes.EnsureRoute(ipStr)
+		}
 	}
 
 	mu.Lock()

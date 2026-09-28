@@ -8,6 +8,6 @@ var errUnsupported = errors.New("wintunnel: embedded VPN is only implemented on 
 
 func Available() bool { return false }
 
-func Connect(configJSON, wgConfigText string, mtu int) error { return errUnsupported }
+func Connect(configJSON, wgConfigText string, mtu int, exclusionIPs ...string) error { return errUnsupported }
 
 func Disconnect() {}
