@@ -43,7 +43,7 @@ func main() {
 				},
 			)
 			if terr == nil && t != nil {
-				app.SetTray(t)
+				app.setTray(t)
 			}
 		},
 		OnShutdown: app.shutdown,

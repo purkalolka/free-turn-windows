@@ -21,3 +21,5 @@ captcha_page.html
 node_modules
 dist
 /mobile-dist/
+desktop/frontend/package.json.md5
+*.md5

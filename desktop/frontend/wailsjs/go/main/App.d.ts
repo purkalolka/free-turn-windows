@@ -51,8 +51,6 @@ export function ServerStop(arg1:string):Promise<void>;
 
 export function ServerUninstall(arg1:string,arg2:boolean):Promise<serversetup.UninstallResult>;
 
-export function SetTray(arg1:number):Promise<void>;
-
 export function SetupCreateServer(arg1:serversetup.SSHConfig,arg2:backend.ServerSetupDraft,arg3:serversetup.WgSetupResult):Promise<backend.Server>;
 
 export function SetupDetectRootMode(arg1:serversetup.SSHConfig):Promise<serversetup.SSHConfig>;

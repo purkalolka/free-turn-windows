@@ -60,7 +60,8 @@ func (a *App) setupProgress(line string) {
 	}
 }
 
-func (a *App) SetTray(t interface{ Close() }) {
+// Unexport from Wails binding
+func (a *App) setTray(t interface{ Close() }) {
 	a.tray = t
 }
 

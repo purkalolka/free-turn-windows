@@ -368,6 +368,10 @@ func popupWndProc(hwnd windows.Handle, msg uint32, wParam, lParam uintptr) uintp
 			return 0
 		}
 
+	case wmClose:
+		pDestroyWindow.Call(uintptr(hwnd))
+		return 0
+
 	case wmDestroy:
 		pKillTimer.Call(uintptr(hwnd), 1)
 		popupMu.Lock()
