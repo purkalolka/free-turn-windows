@@ -29,6 +29,8 @@ export function NewServer():Promise<backend.Server>;
 
 export function ParseLink(arg1:string):Promise<backend.ShareLink>;
 
+export function Quit():Promise<void>;
+
 export function SaveServer(arg1:backend.Server):Promise<backend.Server>;
 
 export function ServerLogs(arg1:string,arg2:number):Promise<Array<string>>;
@@ -49,6 +51,8 @@ export function ServerStop(arg1:string):Promise<void>;
 
 export function ServerUninstall(arg1:string,arg2:boolean):Promise<serversetup.UninstallResult>;
 
+export function SetTray(arg1:number):Promise<void>;
+
 export function SetupCreateServer(arg1:serversetup.SSHConfig,arg2:backend.ServerSetupDraft,arg3:serversetup.WgSetupResult):Promise<backend.Server>;
 
 export function SetupDetectRootMode(arg1:serversetup.SSHConfig):Promise<serversetup.SSHConfig>;
@@ -60,6 +64,8 @@ export function SetupProbe(arg1:serversetup.SSHConfig):Promise<serversetup.Probe
 export function SetupStart(arg1:serversetup.SSHConfig,arg2:serversetup.StartOptions):Promise<void>;
 
 export function SetupWgSetup(arg1:serversetup.SSHConfig,arg2:number,arg3:string):Promise<serversetup.WgSetupResult>;
+
+export function ShowWindow():Promise<void>;
 
 export function Status():Promise<backend.Status>;
 
