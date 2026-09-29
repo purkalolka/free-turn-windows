@@ -54,6 +54,10 @@ export function ParseLink(arg1) {
   return window['go']['main']['App']['ParseLink'](arg1);
 }
 
+export function Quit() {
+  return window['go']['main']['App']['Quit']();
+}
+
 export function SaveServer(arg1) {
   return window['go']['main']['App']['SaveServer'](arg1);
 }
@@ -94,6 +98,10 @@ export function ServerUninstall(arg1, arg2) {
   return window['go']['main']['App']['ServerUninstall'](arg1, arg2);
 }
 
+export function SetTray(arg1) {
+  return window['go']['main']['App']['SetTray'](arg1);
+}
+
 export function SetupCreateServer(arg1, arg2, arg3) {
   return window['go']['main']['App']['SetupCreateServer'](arg1, arg2, arg3);
 }
@@ -116,6 +124,10 @@ export function SetupStart(arg1, arg2) {
 
 export function SetupWgSetup(arg1, arg2, arg3) {
   return window['go']['main']['App']['SetupWgSetup'](arg1, arg2, arg3);
+}
+
+export function ShowWindow() {
+  return window['go']['main']['App']['ShowWindow']();
 }
 
 export function Status() {
