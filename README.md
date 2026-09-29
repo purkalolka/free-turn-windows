@@ -2,65 +2,80 @@
 
 <img src="logo.webp" height="250">
 
-![License](https://img.shields.io/badge/license-Happy_Bunny-ff69b4?style=flat-square&logoColor=white&labelColor=0D1117)
-![Go](https://img.shields.io/badge/Go-1.26-00ADD8?style=flat-square&logo=go&logoColor=white&labelColor=0D1117)
-![Docker](https://img.shields.io/badge/docker-ready-2496ED?style=flat-square&logo=docker&logoColor=white&labelColor=0D1117)
-![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Windows%20%7C%20macOS%20%7C%20Android%20%7C%20iOS-green?style=flat-square&labelColor=0D1117)
+# FreeTurn for Windows
+
+![Platform](https://img.shields.io/badge/Platform-Windows-0078D6?style=flat-square&logo=windows&logoColor=white)
+![Wails](https://img.shields.io/badge/UI-Wails%20v2%20%7C%20React%2019-DF0000?style=flat-square&logo=wails&logoColor=white)
+![Go](https://img.shields.io/badge/Go-1.26-00ADD8?style=flat-square&logo=go&logoColor=white)
+![License](https://img.shields.io/badge/license-Happy_Bunny-ff69b4?style=flat-square&logoColor=white)
+
+**FreeTurn Windows Client** — графический клиент обхода блокировок и цензуры на базе инкапсуляции трафика через TURN/WebRTC протоколы с полноценной поддержкой системного VPN (Wintun / WireGuard / AmneziaWG).
+
+[**Скачать релиз (v1.0.0)**](https://github.com/purkalolka/free-turn-windows/releases/latest)
+
 </div>
 
-## О проекте
+---
 
-**Free Turn Proxy** - универсальный прокси-туннель для инкапсуляции UDP/TCP трафика поверх протокола TURN. Клиент извлекает временные TURN-учётки из ссылок на WebRTC-звонки и прозрачно маршрутизирует ваш VPN-трафик (WireGuard, AmneziaWG, Xray/VLESS) до сервера на VPS, используя DTLS и механизмы маскировки пакетов.
+## Возможности
 
-## Разработка
+- 🚀 **Полноценный системный VPN**: создание виртуального адаптера Wintun и перенаправление всего системного трафика (WireGuard / AmneziaWG) через защищенный релей.
+- 🛡️ **Обход блокировок и DPI**: маскировка UDP/TCP трафика под WebRTC/TURN соединения и звонки, шифрование DTLS/TLS и обфускация пакетов (`rtpopus`, `rtpopus2`, `rtpopus3`, `shape`).
+- 🔗 **Поддержка ссылок подключения**: мгновенный импорт конфигураций по ссылке `freeturn://` или прямых конфигов WireGuard/AmneziaWG (`.conf`).
+- 🖥️ **Управление серверами**: встроенный мастер настройки и развертывания своего сервера на VPS через SSH в один клик, управление пирами и экспорт ссылок.
+- 📦 **Встроенный Wintun драйвер**: драйвер `wintun.dll` встроен в клиент и автоматически распаковывается при необходимости.
 
-### Зависимости
+---
 
-- **Go** ≥ 1.26 - `https://go.dev/dl/`
-- **Task** (runner) - `go install github.com/go-task/task/v3/cmd/task@v3.40.0` или `winget install Task.Task` / `brew install go-task`
+## Быстрый старт
 
-Остальные dev-инструменты (`golangci-lint`, `govulncheck`, `goimports`, `goreleaser`) ставит сам Task:
+### 1. Установка
+1. Перейдите в [**Releases**](https://github.com/purkalolka/free-turn-windows/releases/latest) и скачайте архив `FreeTurn-Windows-Portable-v1.0.0.zip`.
+2. Распакуйте архив в любую удобную папку на компьютере.
 
+### 2. Запуск
+> ⚠️ **Важно:** Для создания виртуального сетевого адаптера Wintun и настройки системных маршрутов требуются права администратора.
+
+- Запустите **`Run_Admin.bat`** (или нажмите правой кнопкой мыши по **`FreeTurn.exe`** ➔ **«Запуск от имени администратора»**).
+
+### 3. Подключение
+1. Вставьте ссылку конфигурации формата `freeturn://...` в поле добавления или импортируйте свой WireGuard `.conf`.
+2. В выпадающем списке режима переключите на **VPN** для перенаправления всего трафика через туннель.
+3. Нажмите кнопку **Подключиться**.
+
+---
+
+## Сборка из исходников
+
+### Требования
+- **Go** ≥ 1.26
+- **Node.js** ≥ 18 + **npm**
+- **Wails CLI v2**:
+  ```bash
+  go install github.com/wailsapp/wails/v2/cmd/wails@latest
+  ```
+
+### Сборка приложения
 ```bash
-task tools:install
+# Переходим в каталог desktop
+cd desktop
+
+# Установка зависимостей фронтенда
+npm --prefix frontend install
+
+# Сборка production-бинарника (с обязательным флагом -checklinkname=0)
+wails build -ldflags "-checklinkname=0 -s -w" -trimpath
+```
+Готовый исполняемый файл будет доступен в `desktop/build/bin/freeturn-desktop.exe`.
+
+### Запуск в dev-режиме
+```bash
+cd desktop
+wails dev
 ```
 
-### Команды
-
-```bash
-task                # список доступных задач
-task build          # собрать client + server в dist/ для текущего хоста
-task build:all      # кросс-сборка всех target через goreleaser snapshot
-task build:ios      # сборка XCFramework для iOS в dist/Mobile.xcframework
-task build:android  # сборка AAR архива для Android в dist/freeturn.aar
-task test           # go test -race
-task test:cover     # тесты + покрытие -> cover.html
-task lint           # golangci-lint
-task fmt            # gofmt + goimports (форматирование)
-task fmt:check      # проверить форматирование (используется в CI)
-task vet            # go vet
-task vuln           # govulncheck
-task ci             # полный набор: fmt:check + vet + lint + test + vuln
-task tidy           # go mod tidy
-task clean          # удалить dist/, cover.out, cover.html
-```
-
-## Документация
-
-- [Быстрый старт](./docs/quickstart.md)
-- [Режимы](./docs/modes.md)
-- [Флаги](./docs/flags.md)
-- [Развёртывание](./docs/deploy.md)
-- [Мобильные Устройства](./docs/mobile.md)
-- [URI и форматы ссылок](./docs/uri.md)
-- [Подписки (Subscriptions)](./docs/sub.md)
-- [Провайдеры](./docs/providers.md)
-- [Решение проблем](./docs/troubleshooting.md)
+---
 
 ## Благодарности
-
-Огромное спасибо за вклад и идеи:
-- [@cacggghp](https://github.com/cacggghp)
-- [@Moroka8](https://github.com/Moroka8)
-- [@alxmcp](https://github.com/alxmcp)
-- [@TheAirBlow](https://github.com/TheAirBlow)
+- Ядро прокси: [Free Turn Proxy](https://github.com/samosvalishe/free-turn-proxy)
+- Разработчикам Wails, Wintun и сообществу.
