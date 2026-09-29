@@ -98,10 +98,6 @@ export function ServerUninstall(arg1, arg2) {
   return window['go']['main']['App']['ServerUninstall'](arg1, arg2);
 }
 
-export function SetTray(arg1) {
-  return window['go']['main']['App']['SetTray'](arg1);
-}
-
 export function SetupCreateServer(arg1, arg2, arg3) {
   return window['go']['main']['App']['SetupCreateServer'](arg1, arg2, arg3);
 }
