@@ -1,4 +1,4 @@
-name: Build Core AAR
+﻿name: Build Core AAR
 
 on:
   workflow_dispatch:
@@ -12,8 +12,8 @@ env:
   GO_VERSION: "1.26.7"
   GOMOBILE_VERSION: latest
   TASK_VERSION: 3.52.0
-  # тег намеренно не вида v*.*.*, чтобы не триггерить основной release.yml
-  RELEASE_TAG: aar-3.4.0-vkcalls
+  # С‚РµРі РЅР°РјРµСЂРµРЅРЅРѕ РЅРµ РІРёРґР° v*.*.*, С‡С‚РѕР±С‹ РЅРµ С‚СЂРёРіРіРµСЂРёС‚СЊ РѕСЃРЅРѕРІРЅРѕР№ release.yml
+  RELEASE_TAG: v340-vkcalls
   NDK_VERSION: 27.2.12479018
 
 jobs:
@@ -39,7 +39,7 @@ jobs:
           SDK="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
           NDK_DIR="$(ls -d "$SDK"/ndk/*/ 2>/dev/null | sort -V | tail -n1 || true)"
           if [ -z "$NDK_DIR" ]; then
-            echo "NDK не найден, ставлю $NDK_VERSION"
+            echo "NDK РЅРµ РЅР°Р№РґРµРЅ, СЃС‚Р°РІР»СЋ $NDK_VERSION"
             yes | "$SDK/cmdline-tools/latest/bin/sdkmanager" "ndk;$NDK_VERSION" > /dev/null
             NDK_DIR="$SDK/ndk/$NDK_VERSION/"
           fi
