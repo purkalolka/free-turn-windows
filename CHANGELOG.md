@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.5.0](https://github.com/purkalolka/free-turn-windows/compare/v3.4.0...v3.5.0) (2026-09-30)
+
+
+### Features
+
+* implement VK Calls API path (client_id=8093730) for captcha-free TURN credentials ([dfed6c9](https://github.com/purkalolka/free-turn-windows/commit/dfed6c978c2800421c6295fd5d1db5eff6215c96))
+
+
+### Bug Fixes
+
+* accept 'token' field in auth.getAnonymToken response ([7c1ff2d](https://github.com/purkalolka/free-turn-windows/commit/7c1ff2d9c5125769ff5ee0f0f3985dc0463c7710))
+* add static /32 exclusion route for server SSH and peer to keep server operations working under VPN ([b381d1a](https://github.com/purkalolka/free-turn-windows/commit/b381d1a054e3e8b91846550afa2a087821259be3))
+* address code review issues (tray binding, popup msg pump, ci branch triggers, gitignore) ([624e78a](https://github.com/purkalolka/free-turn-windows/commit/624e78a0a537a6bbada0cfa558d7ed021a66275e))
+* **release-please:** use GITHUB_TOKEN — RELEASE_PLEASE_TOKEN was not set ([654525b](https://github.com/purkalolka/free-turn-windows/commit/654525be0f82d5d18d49a953d33aaf0e347a9793))
+
 ## [3.4.0](https://github.com/samosvalishe/free-turn-proxy/compare/v3.3.2...v3.4.0) (2026-09-07)
 
 
