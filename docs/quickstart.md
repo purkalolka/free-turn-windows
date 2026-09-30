@@ -64,7 +64,8 @@ sudo ./client -listen 127.0.0.1:9000 -peer <vps_ip>:56000 -link "<vk-link>" -obf
 
 ```bash
 termux-wake-lock
-# Скачивание: curl -L -o client https://github.com/samosvalishe/free-turn-proxy/releases/latest/download/client-android-arm64 && chmod +x client
+# Соберите из исходников:
+GOOS=android GOARCH=arm64 go build -o client ./cmd/client && chmod +x client
 
 # Обязательно укажите ваш ключ и DNS оператора (можно узнать в настройках APN)
 ./client -listen 127.0.0.1:9000 -peer <vps_ip>:56000 -link "<vk-link>" -obf-profile rtpopus3 -obf-key <ВАШ_КЛЮЧ> -dns-servers <ip_dns_оператора> -client-id <ВАШ_CLIENT_ID>
