@@ -9,14 +9,11 @@
 3. **Критично:** Добавьте Termux в **Исключения WireGuard** (разрешенные приложения, не пускать через VPN). Если этого не сделать, туннель завернется сам в себя, и соединения не будет.
 4. **Критично:** В большинстве случаев мобильные операторы блокируют сторонние DNS, включая DoH. Передавайте IP-адрес DNS вашего оператора связи через флаг `-dns-servers`.
 
-Пример запуска в Termux:
+Сборка клиента из исходников для Termux (arm64):
 
 ```bash
-termux-wake-lock
-curl -L -o client https://github.com/samosvalishe/free-turn-proxy/releases/latest/download/client-android-arm64
-chmod +x client
-# Замените <ip_dns_оператора> на DNS вашего провайдера
-./client -listen 127.0.0.1:9000 -peer <vps>:56000 -link "<vk-link>" -dns-servers <ip_dns_оператора>
+GOOS=android GOARCH=arm64 go build -o dist/client-android-arm64 ./cmd/client
+adb push dist/client-android-arm64 /data/data/com.termux/files/usr/bin/client
 ```
 
 Снять wake lock: `termux-wake-unlock`.
