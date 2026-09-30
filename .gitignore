@@ -23,3 +23,6 @@ dist
 /mobile-dist/
 desktop/frontend/package.json.md5
 *.md5
+
+# Local AI-agent instructions — not project content
+AGENTS.md

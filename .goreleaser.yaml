@@ -59,19 +59,6 @@ builds:
       - windows_386
       - freebsd_amd64
 
-  # Android client only. Pure Go (CGO=0), для standalone-запуска в Termux.
-  - id: client-android
-    main: ./cmd/client
-    binary: client
-    flags:
-      - -trimpath
-    ldflags:
-      - -s -w -checklinkname=0 -X main.version={{.Version}}
-    env:
-      - CGO_ENABLED=0
-    targets:
-      - android_arm64
-
 archives:
   # Raw, stable-named binaries (no version in filename) so docs and scripts
   # can fetch /releases/latest/download/<binary>-<os>-<arch> directly without
@@ -86,21 +73,8 @@ archives:
       {{- with .Arm }}v{{ . }}{{ end }}
       {{- with .Mips }}-{{ . }}{{ end }}
 
-  # Android client как raw-бинарь со стабильным именем - для Termux
-  - id: raw-android
-    ids:
-      - client-android
-    formats: [binary]
-    name_template: "client-{{ .Os }}-{{ .Arch }}"
-
 checksum:
   name_template: checksums.txt
-  # Mobile artifacts ship via release.extra_files and are not build outputs;
-  # list them here so hosts (Android Gradle fetch) can verify what they download.
-  extra_files:
-    - glob: mobile-dist/freeturn.aar
-    - glob: mobile-dist/freeturn-sources.jar
-    - glob: mobile-dist/Mobile.xcframework.zip
 
 sboms:
   - artifacts: archive
@@ -144,10 +118,6 @@ release:
   mode: replace
   draft: false
   name_template: "{{ .ProjectName }} {{ .Version }}"
-  extra_files:
-    - glob: mobile-dist/freeturn.aar
-    - glob: mobile-dist/freeturn-sources.jar
-    - glob: mobile-dist/Mobile.xcframework.zip
 
 dockers_v2:
   - id: server
