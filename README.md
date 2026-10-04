@@ -11,7 +11,7 @@
 
 **FreeTurn Windows Client** — графический клиент обхода блокировок и цензуры на базе инкапсуляции трафика через TURN/WebRTC протоколы с полноценной поддержкой системного VPN (Wintun / WireGuard / AmneziaWG).
 
-[**Скачать релиз (v1.0.1)**](https://github.com/purkalolka/free-turn-windows/releases/latest)
+[**Скачать релиз (v1.0.2)**](https://github.com/purkalolka/free-turn-windows/releases/latest)
 
 </div>
 
@@ -27,10 +27,37 @@
 
 ---
 
+## Улучшения и исправления в ядре (free-turn-proxy v3.4.1)
+
+Клиент синхронизирован с обновленным и прошедшим аудит безопасности ядром **[free-turn-proxy v3.4.1](https://github.com/purkalolka/free-turn-proxy)**:
+
+1. **Авторизация VK Calls без капчи**:
+   - Официальный мобильный клиентский ID (`client_id=8093730`) для методов `auth.getAnonymToken` и `messages.getAnonymCallToken`.
+   - Поддержка полей `token` и `user_token` в ответах API гарантирует получение TURN-учетных данных без запроса капчи.
+
+2. **DTLS Certificate Pinning (Защита от MITM)**:
+   - Проверка SHA-256 отпечатка сертификата сервера (`sha256:...`) на стороне клиента для исключения атак подмены сервера или перехвата сессии.
+   - Поддержка отпечатка в ссылках конфигурации `freeturn://` (параметр `fp`), в профилях серверов и в CLI (`-dtls-fingerprint`).
+   - Автоматическая генерация и сохранение постоянного самоподписанного сертификата на сервере (`LoadOrGenerateCert`).
+
+3. **Защита от атак повтора (Anti-Replay Window)**:
+   - 128-битный скользящий фильтр повторов (RFC 6479 / RFC 4303) в протоколах обфускации RTP Opus (`rtpopus`, `rtpopus2`, `rtpopus3`).
+   - Предварительная проверка последовательности пакетов до AEAD дешифровки для защиты от DoS и replay-атак.
+
+4. **Безопасные права доступа (Chmod 0600)**:
+   - Файлы сохраненных профилей, учетных данных и приватных ключей сохраняются с безопасными правами `0600` (`-rw-------`).
+
+5. **Отказоустойчивое управление сервером (Server Control)**:
+   - Скрипты развертывания сервера по SSH переключены на защищенный репозиторий `https://github.com/purkalolka/free-turn-proxy`.
+   - Внедрен механизм повторных попыток (retries/backoff) с таймаутами при скачивании бинарников и обязательная сверка контрольных сумм SHA-256.
+   - Улучшена обработка системных блокировок пакетных менеджеров (APT, YUM/DNF, APK).
+
+---
+
 ## Быстрый старт
 
 ### 1. Установка
-1. Перейдите в [**Releases**](https://github.com/purkalolka/free-turn-windows/releases/latest) и скачайте архив `FreeTurn-Windows-Portable-v1.0.1.zip`.
+1. Перейдите в [**Releases**](https://github.com/purkalolka/free-turn-windows/releases/latest) и скачайте архив `FreeTurn-Windows-Portable-v1.0.2.zip`.
 2. Распакуйте архив в любую удобную папку на компьютере.
 
 ### 2. Запуск
@@ -77,5 +104,5 @@ wails dev
 ---
 
 ## Благодарности
-- Ядро прокси: [Free Turn Proxy](https://github.com/samosvalishe/free-turn-proxy)
+- Ядро прокси: [Free Turn Proxy](https://github.com/purkalolka/free-turn-proxy)
 - Разработчикам Wails, Wintun и сообществу.

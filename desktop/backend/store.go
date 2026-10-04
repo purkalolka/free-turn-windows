@@ -40,6 +40,9 @@ type Server struct {
 	Debug         bool `json:"debug"`
 	Routes        bool `json:"routes"`
 
+	// DTLSFingerprint is the optional SHA-256 fingerprint for DTLS leaf cert pinning.
+	DTLSFingerprint string `json:"dtlsFingerprint,omitempty"`
+
 	// TurnHost/TurnPort override the TURN server address from provider creds; empty uses the creds as-is.
 	TurnHost string     `json:"turnHost"`
 	TurnPort string     `json:"turnPort"`

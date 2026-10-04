@@ -97,3 +97,31 @@ func TestShareLinkWgRoundTrip(t *testing.T) {
 		t.Fatalf("round trip lost wg conf: %q", back.WgConf)
 	}
 }
+
+func TestShareLinkFingerprintRoundTrip(t *testing.T) {
+	fp := "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+	encoded, err := ShareLink{
+		Provider:    "vk",
+		Peer:        "203.0.113.5:56000",
+		Fingerprint: fp,
+	}.Encode()
+	if err != nil {
+		t.Fatal(err)
+	}
+	back, err := ParseShareLink(encoded)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if back.Fingerprint != fp {
+		t.Fatalf("round trip lost fingerprint: got %q, want %q", back.Fingerprint, fp)
+	}
+
+	srv := back.ApplyTo(DefaultServer())
+	if srv.DTLSFingerprint != fp {
+		t.Fatalf("ApplyTo lost fingerprint: got %q, want %q", srv.DTLSFingerprint, fp)
+	}
+	cfg := srv.ToCoreConfig()
+	if cfg.DTLSFingerprint != fp {
+		t.Fatalf("ToCoreConfig lost fingerprint: got %q, want %q", cfg.DTLSFingerprint, fp)
+	}
+}

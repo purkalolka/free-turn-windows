@@ -68,6 +68,7 @@ export namespace backend {
 	    manualCaptcha: boolean;
 	    debug: boolean;
 	    routes: boolean;
+	    dtlsFingerprint?: string;
 	    turnHost: string;
 	    turnPort: string;
 	    kcp: KCPProfile;
@@ -103,6 +104,7 @@ export namespace backend {
 	        this.manualCaptcha = source["manualCaptcha"];
 	        this.debug = source["debug"];
 	        this.routes = source["routes"];
+	        this.dtlsFingerprint = source["dtlsFingerprint"];
 	        this.turnHost = source["turnHost"];
 	        this.turnPort = source["turnPort"];
 	        this.kcp = this.convertValues(source["kcp"], KCPProfile);
@@ -173,6 +175,7 @@ export namespace backend {
 	    name: string;
 	    vkLink: string;
 	    wgConf: string;
+	    fingerprint?: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new ShareLink(source);
@@ -197,6 +200,7 @@ export namespace backend {
 	        this.name = source["name"];
 	        this.vkLink = source["vkLink"];
 	        this.wgConf = source["wgConf"];
+	        this.fingerprint = source["fingerprint"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

@@ -12,11 +12,12 @@ import (
 
 // ClientJSON - JSON-схема конфигурации клиента (gomobile).
 type ClientJSON struct {
-	Peer     string `json:"peer"`
-	ClientID string `json:"clientId"`
-	SubURL   string `json:"subUrl"`
-	Provider string `json:"provider"`
-	Routes   bool   `json:"routes"`
+	Peer            string `json:"peer"`
+	ClientID        string `json:"clientId"`
+	DTLSFingerprint string `json:"dtlsFingerprint,omitempty"`
+	SubURL          string `json:"subUrl"`
+	Provider        string `json:"provider"`
+	Routes          bool   `json:"routes"`
 
 	TURN   turnJSON   `json:"turn"`
 	Proxy  proxyJSON  `json:"proxy"`
@@ -120,9 +121,10 @@ func ParseClientJSON(data []byte, overlayURI string) (*Client, error) {
 func defaultClientJSON() ClientJSON {
 	r := defaultRaw()
 	return ClientJSON{
-		Peer:     r.Peer,
-		ClientID: r.ClientID,
-		SubURL:   r.SubURL,
+		Peer:            r.Peer,
+		ClientID:        r.ClientID,
+		DTLSFingerprint: r.DTLSFingerprint,
+		SubURL:          r.SubURL,
 		Provider: r.Provider,
 		Routes:   r.Routes,
 		TURN: turnJSON{
@@ -178,10 +180,11 @@ func (j ClientJSON) toRaw() raw {
 		DNSMode:    j.DNS.Mode,
 		DNSServers: strings.Join(j.DNS.Servers, ","),
 
-		Debug:    j.Log.Debug,
-		ClientID: j.ClientID,
-		SubURL:   j.SubURL,
-		Routes:   j.Routes,
+		Debug:           j.Log.Debug,
+		ClientID:        j.ClientID,
+		DTLSFingerprint: j.DTLSFingerprint,
+		SubURL:          j.SubURL,
+		Routes:          j.Routes,
 
 		TunnelMode:   j.Tunnel.Mode,
 		TunnelConfig: j.Tunnel.Config,

@@ -52,6 +52,8 @@ type linkPayload struct {
 	// client config (a separate peer the owner created for them), so importing
 	// the link is enough to bring up the embedded VPN with no separate client.
 	WgConf string `json:"wg,omitempty"`
+	// Fingerprint is the SHA-256 fingerprint for DTLS certificate pinning ("fp").
+	Fingerprint string `json:"fp,omitempty"`
 }
 
 // ShareLink is the decoded/editable form of a freeturn:// link.
@@ -73,6 +75,7 @@ type ShareLink struct {
 	Name           string      `json:"name"`
 	VKLink         string      `json:"vkLink"`
 	WgConf         string      `json:"wgConf"`
+	Fingerprint    string      `json:"fingerprint,omitempty"`
 }
 
 // LooksLikeLink reports whether raw is (trimmed of whitespace) a freeturn:// link.
@@ -120,6 +123,7 @@ func ParseShareLink(raw string) (*ShareLink, error) {
 		Name:           p.Name,
 		VKLink:         p.VKLink,
 		WgConf:         strings.TrimSpace(p.WgConf),
+		Fingerprint:    p.Fingerprint,
 	}
 	if p.DNSServers != "" {
 		link.DNSServers = splitAndTrim(p.DNSServers)
@@ -141,6 +145,7 @@ func (l ShareLink) Encode() (string, error) {
 		N: l.N, StreamsPerCred: l.StreamsPerCred, ClientID: l.ClientID,
 		Listen: l.Listen, DNSMode: l.DNSMode,
 		ManualCaptcha: l.ManualCaptcha, Name: l.Name, VKLink: l.VKLink, WgConf: l.WgConf,
+		Fingerprint: l.Fingerprint,
 	}
 	if l.ObfProfile != "" && l.ObfProfile != "none" {
 		p.Obf = l.ObfProfile
@@ -216,6 +221,9 @@ func (l ShareLink) ApplyTo(s Server) Server {
 	if l.WgConf != "" {
 		s.WgClientConf = l.WgConf
 		s.ConnMode = ConnModeVPN
+	}
+	if l.Fingerprint != "" {
+		s.DTLSFingerprint = l.Fingerprint
 	}
 	return s
 }

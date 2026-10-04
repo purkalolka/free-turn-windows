@@ -26,10 +26,11 @@ func DefaultKCPProfile() KCPProfile {
 // mobile.Start/mobile.ValidateConfig/mobile.ConfigToArgs. Field tags must match
 // that schema exactly; the core rejects unknown fields.
 type CoreConfig struct {
-	Peer     string     `json:"peer"`
-	ClientID string     `json:"clientId"`
-	SubURL   string     `json:"subUrl"`
-	Provider string     `json:"provider"`
+	Peer            string     `json:"peer"`
+	ClientID        string     `json:"clientId"`
+	DTLSFingerprint string     `json:"dtlsFingerprint,omitempty"`
+	SubURL          string     `json:"subUrl"`
+	Provider        string     `json:"provider"`
 	Routes   bool       `json:"routes"`
 	TURN     CoreTurn   `json:"turn"`
 	Proxy    CoreProxy  `json:"proxy"`
@@ -101,9 +102,10 @@ func (c CoreConfig) JSON() (string, error) {
 // ToCoreConfig maps a saved server profile onto the engine's wire schema.
 func (s Server) ToCoreConfig() CoreConfig {
 	return CoreConfig{
-		Peer:     s.Peer,
-		ClientID: s.ClientID,
-		Provider: s.Provider,
+		Peer:            s.Peer,
+		ClientID:        s.ClientID,
+		DTLSFingerprint: s.DTLSFingerprint,
+		Provider:        s.Provider,
 		Routes:   s.Routes,
 		TURN: CoreTurn{
 			N:         s.N,
