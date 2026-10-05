@@ -100,6 +100,7 @@ _resolve_version() {  # URL -> tag (или пусто)
     fi
     tag=$(printf '%s' "$loc" | sed -nE 's#.*/releases/download/([^/]+)/.*#\1#p')
     if [ -z "$tag" ]; then tag=$(_resolve_version_api); fi
+    if [ -z "$tag" ]; then tag="v3.4.1"; fi
     printf '%s' "$tag"
 }
 
@@ -162,6 +163,9 @@ _fetch_verified() {
             got=1
         elif _dl_http_error && _dl "$latest_url" "$out"; then
             got=1
+        elif _dl_http_error && [ "$tag" != "v3.4.1" ] && _dl "$RELEASES_URL/download/v3.4.1/$name" "$out"; then
+            got=1
+            [ -z "$want" ] && want=$(_release_sha "v3.4.1" "$name")
         fi
         if [ "$got" = 1 ]; then
             if _check_download "$out" "$want"; then return 0; fi

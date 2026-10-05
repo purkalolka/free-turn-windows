@@ -11,7 +11,7 @@
 
 **FreeTurn Windows Client** — графический клиент обхода блокировок и цензуры на базе инкапсуляции трафика через TURN/WebRTC протоколы с полноценной поддержкой системного VPN (Wintun / WireGuard / AmneziaWG).
 
-[**Скачать релиз (v1.0.2)**](https://github.com/purkalolka/free-turn-windows/releases/latest)
+[**Скачать релиз (v1.0.3)**](https://github.com/purkalolka/free-turn-windows/releases/latest)
 
 </div>
 
@@ -57,7 +57,7 @@
 ## Быстрый старт
 
 ### 1. Установка
-1. Перейдите в [**Releases**](https://github.com/purkalolka/free-turn-windows/releases/latest) и скачайте архив `FreeTurn-Windows-Portable-v1.0.2.zip`.
+1. Перейдите в [**Releases**](https://github.com/purkalolka/free-turn-windows/releases/latest) и скачайте архив `FreeTurn-Windows-Portable-v1.0.3.zip`.
 2. Распакуйте архив в любую удобную папку на компьютере.
 
 ### 2. Запуск

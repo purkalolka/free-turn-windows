@@ -24,8 +24,9 @@ import (
 // with `install --local-bin` - no outbound access from the VPS needed at all.
 
 const (
-	releasesBase = "https://github.com/samosvalishe/free-turn-proxy/releases"
-	apiLatestURL = "https://api.github.com/repos/samosvalishe/free-turn-proxy/releases/latest"
+	releasesBase = "https://github.com/purkalolka/free-turn-proxy/releases"
+	apiLatestURL = "https://api.github.com/repos/purkalolka/free-turn-proxy/releases/latest"
+	fallbackTag  = "v3.4.1"
 )
 
 var (
@@ -90,18 +91,18 @@ func resolveLatestTag(ctx context.Context, asset string) (string, error) {
 
 	areq, err := http.NewRequestWithContext(ctx, http.MethodGet, apiLatestURL, nil)
 	if err != nil {
-		return "", err
+		return fallbackTag, nil
 	}
 	resp, err := (&http.Client{Timeout: 30 * time.Second}).Do(areq)
 	if err != nil {
-		return "", fmt.Errorf("не удалось определить версию релиза: %w", err)
+		return fallbackTag, nil
 	}
 	defer resp.Body.Close()
 	var body struct {
 		Tag string `json:"tag_name"`
 	}
 	if err := json.NewDecoder(resp.Body).Decode(&body); err != nil || body.Tag == "" {
-		return "", errors.New("не удалось определить версию релиза")
+		return fallbackTag, nil
 	}
 	return body.Tag, nil
 }

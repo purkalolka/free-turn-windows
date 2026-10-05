@@ -54,9 +54,9 @@ CLIENTS_DIR="${PREFIX}/clients"
 CLIENTS_META="${CLIENTS_DIR}/clients.list"
 
 # Репозитории и ссылки
-REPO="samosvalishe/free-turn-proxy"
+REPO="purkalolka/free-turn-proxy"
 IMAGE="ghcr.io/${REPO}"
-AWG_IMAGE="ghcr.io/samosvalishe/freeturn-awg:latest"
+AWG_IMAGE="ghcr.io/purkalolka/freeturn-awg:latest"
 RELEASES_URL="https://github.com/${REPO}/releases"
 BASE_URL="${RELEASES_URL}/latest/download"
 
@@ -2733,7 +2733,7 @@ install_cli_symlink() {
             cp -f "$cur_script" "$script_target" 2>/dev/null || true
         fi
     elif [ ! -f "$script_target" ]; then
-        local repo_raw="https://raw.githubusercontent.com/samosvalishe/free-turn-proxy/master/scripts/install.sh"
+        local repo_raw="https://raw.githubusercontent.com/purkalolka/free-turn-proxy/main/scripts/install.sh"
         if command -v curl >/dev/null 2>&1; then
             curl -sSL "$repo_raw" -o "$script_target" 2>/dev/null || true
         elif command -v wget >/dev/null 2>&1; then
